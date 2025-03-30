@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    
+    int data;
+    struct node *prev;
+    struct node *next;
+};
+
+struct node *create(int data){
+    
+    struct node *new = (struct node*)malloc(sizeof(struct node));
+    new->data = data;
+    new->prev = NULL;
+    new->next = NULL;
+}
+
+
+void insert(struct node **head , int data , int pos){
+    
+    
+    struct node *new = (struct node *)malloc(sizeof(struct node));
+    new->data= data;
+    struct node *temp = *head;
+    if(pos == 1){
+        
+        new->next = *head;
+        new->prev = NULL;
+        *head= new;
+    }
+    else{
+        
+        for(int i=0 ; i<pos-2 ; i++){
+            
+            temp = temp->next;
+        }
+        
+        if(temp->next !=NULL){
+            
+            struct node *hold = temp->next;
+            temp->next = new;
+            new->prev = temp;
+            new->next = hold;
+            hold->prev = new;
+            
+        }
+        else if(temp->next == NULL){
+            temp->next = new;
+            new->prev=temp;
+            
+            
+        }
+    }
+}
+
+void delete(struct node **head , int pos){
+    
+    struct node *temp = *head; 
+    if(pos == 1){
+        
+        (*head) = (*head)->next;
+    }
+    else{
+        for(int i=0 ; i<pos-2 ; i++){
+            
+            temp = temp->next;
+        }
+        if(temp->next != NULL){
+            
+            struct node *hold = temp->next->next;
+            
+            temp->next = hold;
+            hold->prev = temp;
+        }
+        else if(temp->next ==NULL){
+            struct node *hold = temp->prev;
+            hold->next = NULL;
+            
+            
+        }
+    }
+}
+
+void display(struct node **head){
+    
+    struct node *temp = *head;
+    
+    while(temp != NULL){
+        
+        printf("%d->",temp->data);
+        temp = temp->next;
+    }
+    
+    
+}
+
+int main(){
+    
+    struct node *head = create(4);
+    insert(&head,3,1);
+    insert(&head,2,1);
+    insert(&head,1,1);
+    delete(&head,3);
+    
+    display(&head);
+}
